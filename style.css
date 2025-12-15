@@ -1,0 +1,136 @@
+body {
+    font-family: 'Consolas', monospace; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #0d0d1a; 
+    color: #ccffff; 
+    margin: 0;
+    padding: 20px;
+}
+
+#game-container {
+    background-color: #1a1a33; 
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.5); 
+    text-align: center;
+    width: 95%; 
+    max-width: 600px;
+    border: 3px solid #0ff;
+}
+
+h1 {
+    color: #0ff;
+    text-shadow: 0 0 10px #0ff;
+    font-size: 7vw;
+    margin-bottom: 5px;
+}
+
+#timestamp-display {
+    font-size: 3vw;
+    margin-bottom: 20px;
+}
+
+/* --- Energy Bar --- */
+.energy-bar-container {
+    width: 100%;
+    height: 40px; 
+    background-color: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 30px 0;
+    border: 2px solid #0ff;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+#energy-bar-fill {
+    height: 100%;
+    width: 0%; 
+    background: linear-gradient(to right, #00f, #0f0); 
+    transition: width 0.2s ease-out; 
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.7);
+}
+
+/* --- Readings & Status --- */
+
+#readings-container {
+    text-align: left;
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid #0ff3;
+}
+
+#voltage-display, #current-display, #power-display, #energy-display {
+    font-size: 3.5vw;
+    margin: 5px 0;
+}
+
+#status-box {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background-color: #333;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#status-message {
+    font-size: 4vw;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 5px #f00;
+}
+
+/* --- ULTIMATE MODE --- */
+.ultimate-active {
+    border-color: #f00;
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+    background-color: #331a1a; 
+}
+
+.ultimate-active #status-message {
+    color: #ff0000;
+    text-shadow: 0 0 15px #f00;
+}
+
+/* --- Cost Savings Section --- */
+#cost-savings-container {
+    margin-top: 35px;
+    padding: 20px 10px;
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+    background-color: #0d2626; 
+}
+
+#cost-savings-container h2 {
+    color: #ccffff;
+    font-size: 5vw;
+    margin-bottom: 10px;
+}
+
+#cost-savings-container p {
+    font-size: 3.5vw;
+    margin: 5px 0;
+}
+
+.highlight-text {
+    color: #ffcc00; 
+    font-weight: bold;
+    font-size: 4vw;
+    text-shadow: 0 0 5px #ffcc00;
+}
+
+
+@media (min-width: 600px) {
+    h1 { font-size: 40px; }
+    #timestamp-display { font-size: 18px; }
+    #voltage-display, #current-display, #power-display, #energy-display { font-size: 20px; }
+    #status-message { font-size: 24px; }
+    #cost-savings-container h2 { font-size: 24px; }
+    #cost-savings-container p { font-size: 18px; }
+    .highlight-text { font-size: 22px; }
+}
