@@ -2,9 +2,9 @@
 // ** CONFIGURATION **
 // =========================================================================
 
-// !!! สำคัญ: IP Address ของ ESP32 ที่เชื่อมต่ออยู่ !!!
+// !!! สำคัญ: แก้ไข IP Address ของ ESP32 !!!
 const ESP32_IP = '172.20.10.5'; 
-const FETCH_INTERVAL = 200; // ดึงข้อมูลทุก 200 มิลลิวินาที (5 ครั้ง/วินาที)
+const FETCH_INTERVAL = 200; // ดึงข้อมูลทุก 200 มิลลิวินาที 
 
 // *** การตั้งค่าสำหรับคำนวณมูลค่าไฟฟ้า ***
 // 1 Joule = 2.777 x 10^-7 Kilowatt-hour (kWh)
@@ -20,11 +20,12 @@ const voltageDisplay = document.getElementById('voltage-display');
 const currentDisplay = document.getElementById('current-display'); 
 const powerDisplay = document.getElementById('power-display'); 
 const energyDisplay = document.getElementById('energy-display'); 
+const potentialEnergyDisplay = document.getElementById('potential-energy-display'); // NEW
 const timestampDisplay = document.getElementById('timestamp-display'); 
 const statusMessage = document.getElementById('status-message');
 const gameContainer = document.getElementById('game-container');
 
-// ตัวแปรใหม่สำหรับส่วนสรุป
+// ตัวแปรสำหรับส่วนสรุป
 const energyKwhDisplay = document.getElementById('energy-kwh-display');
 const savingsDisplay = document.getElementById('savings-display');
 
@@ -58,7 +59,8 @@ function fetchEnergyData() {
         .then(data => {
             // ดึงค่าทั้งหมดจาก JSON
             const voltage = parseFloat(data.voltage_V); 
-            const totalEnergy = parseFloat(data.energy_Joules); // ใช้สำหรับคำนวณมูลค่า
+            const totalEnergy = parseFloat(data.energy_Joules); // E = Integral Pdt (ใช้สำหรับคำนวณ Savings)
+            const potentialEnergy = parseFloat(data.potentialE_Joules); // E = 1/2CV²
             const current = parseFloat(data.current_mA);
             const power = parseFloat(data.power_mW);
             const status = data.status; 
@@ -68,7 +70,7 @@ function fetchEnergyData() {
             let energyPercentage = (voltage / targetVoltage) * 100;
             energyPercentage = Math.min(100, Math.max(0, energyPercentage)); 
 
-            // 2. คำนวณมูลค่าไฟฟ้าที่สร้างได้
+            // 2. คำนวณมูลค่าไฟฟ้าที่สร้างได้ (ใช้ Total Energy (Integrated))
             const savingsData = calculateSavings(totalEnergy);
 
             // 3. อัปเดต DOM
@@ -77,10 +79,14 @@ function fetchEnergyData() {
             voltageDisplay.textContent = `Voltage: ${voltage.toFixed(4)} V`; 
             currentDisplay.textContent = `Current: ${current.toFixed(4)} mA`;
             powerDisplay.textContent = `Power: ${power.toFixed(4)} mW`;
-            energyDisplay.textContent = `Total Energy: ${totalEnergy.toFixed(6)} J`; 
+            energyDisplay.textContent = `Total Energy (Integrated): ${totalEnergy.toFixed(6)} J`; 
+            // *** NEW: อัปเดต Potential Energy ***
+            potentialEnergyDisplay.textContent = 
+                `Potential Energy (½CV²): ${potentialEnergy.toFixed(6)} J`;
+            
             statusMessage.textContent = `Status: ${status}`;
             
-            // *** อัปเดตส่วนสรุปพลังงาน ***
+            // *** อัปเดตส่วนสรุปพลังงาน (Savings) ***
             energyKwhDisplay.textContent = `Energy Generated: ${savingsData.kwh.toFixed(9)} kWh`;
             savingsDisplay.textContent = `Estimated Savings: ${savingsData.baht.toFixed(5)} บาท`;
 
@@ -102,7 +108,8 @@ function fetchEnergyData() {
             voltageDisplay.textContent = `Voltage: N/A`;
             currentDisplay.textContent = `Current: N/A`;
             powerDisplay.textContent = `Power: N/A`;
-            energyDisplay.textContent = `Total Energy: N/A`;
+            energyDisplay.textContent = `Total Energy (Integrated): N/A`;
+            potentialEnergyDisplay.textContent = `Potential Energy (½CV²): N/A`;
             energyKwhDisplay.textContent = `Energy Generated: N/A kWh`;
             savingsDisplay.textContent = `Estimated Savings: N/A บาท`;
             gameContainer.classList.remove('ultimate-active');
